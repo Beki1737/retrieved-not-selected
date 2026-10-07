@@ -1,0 +1,7 @@
+data/
+results/
+legacy/
+logs/
+*.npy
+*.parquet
+__pycache__/
