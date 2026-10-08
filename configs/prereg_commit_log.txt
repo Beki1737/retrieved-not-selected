@@ -5,3 +5,5 @@ cb88e44 2026-10-03 05:47:48 +0000 E7/E8 provenance amendment (follow-up, not pre
 94f3f4f 2026-10-04 01:00:00 +0000 D92: test-retest tool, E1g stronger retrievers, E9 UNGA replication
 9cbe1c2 2026-10-05 06:30:30 +0000 Pre-register H17 (D99); accounting and harmonized E7 (D98)
 b8476f9 2026-10-07 03:19:29 +0000 prereg wave 6: H18 (E11 augmentation at final prediction)
+fd397f3 2026-10-08 02:18:26 +0000 prereg waves 7 and 8: H19 (E12 content appropriateness), H20 (E13 GA generation)
+ed5a835 2026-10-08 04:03:18 +0000 prereg: correction note on the superseded wave-3 amendment (D85)

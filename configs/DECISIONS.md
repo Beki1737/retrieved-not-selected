@@ -1,4 +1,4 @@
-# Decision log (CoalitionRAG ARR Oct 2026)
+# Decision log (project)
 - D1  Match rule: exact agreement on >=3 comparable non-target members is primary; legacy >=0.75 rule is appendix only.
 - D3  Unrecorded votes: never imputed. UN code X -> unrecorded. Undefined pairs reported under lower and upper bounds.
 - D16 Envs: Miniforge conda; 'crag' (analysis) and 'crag-vllm' (serving) kept separate; pins in configs/lock-*.txt.

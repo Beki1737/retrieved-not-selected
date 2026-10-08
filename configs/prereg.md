@@ -85,3 +85,69 @@ Hypotheses:
 - H18c: on drafts whose A1 four slots contain a match, AUROC(N) of the match alone > the four together (H17a in a realistic pool).
 Exploratory: A1 vs A2 (similar vs random), coverage by arm, BC-F1 and P(true) contrasts, A1 four stratified vs B0.
 Expectation stated in advance (not a hypothesis): if selection is the bottleneck, H18a/H18b gains are small relative to the coverage gain, and H18c holds.
+
+## Wave 7 (H19): content appropriateness of precedents (E12)
+
+Motivation: design review item (8 Oct). Identical five-member votes do not make a precedent content-appropriate for the
+agenda item. E12 judges appropriateness with votes and outcomes masked and tests whether the model could have identified
+appropriate precedents from the information it was given. Fixed before any E12 code or output.
+
+Design:
+- Pairs: every (draft, candidate) pair in the E10 candidate sets (matching precedent + three distractors; 50 drafts) and in
+  the E7 stratified slots (66 non-adopted drafts).
+- Judges: J1 Llama-3.3-70B-FP8 (primary), J2 Qwen2.5-32B-GPTQ-Int8 (second family). Option-likelihood scoring, D73 serving.
+- Questions: T same situation or agenda item (1-3); C same countries or parties (1-3); A same kind of Council action (1-3);
+  O appropriate precedent judging only by content (1 no, 2 yes).
+- Information: P = exactly the text the predicting LLM sees (draft text; candidate date and summary) with votes and outcome
+  removed; R = P plus UNSC-CKG metadata (agenda item, subjects, countries concerned, action items, keywords). Sentences with
+  vote or outcome wording are removed from every field.
+- Primary label: appropriate = P(O = yes) >= 0.5 under J1, information P.
+- Validation: blind human annotation of 120 pairs (30 E10 drafts x 4 candidates, provided information only); agreement and
+  Cohen's kappa with J1-P; a second annotator on a subset if available. Same-agenda metadata rule reported as a reference.
+- Statistics: draft-cluster bootstrap, B = 2000, one-sided; Holm across the four models for H19b and H19d.
+
+Hypotheses:
+- H19a: in E10 sets, the matching precedent is judged appropriate more often than the distractors.
+- H19b: per model, the model's own pick (E10, four orderings) is appropriate more often than a random pick from the same set.
+- H19c (decision analysis): on U = E10 drafts whose matching precedent is the only appropriate candidate, the hit rate of the
+  model's pick, pooled over models, with a 95% CI. Reading fixed in advance: upper bound < 0.5 -> "selection failure among
+  content-appropriate precedents"; lower bound > 0.5 -> the claim is restricted to "the model did not consistently select
+  precedents whose votes matched"; otherwise inconclusive. Fewer than 10 drafts in U -> inconclusive by design.
+- H19d: per model, AUROC(N) of the candidate J1-P rates most appropriate, shown alone (existing E10 single-precedent rows),
+  exceeds that of the model's own pick shown alone.
+Exploratory: J1 vs J2, P vs R, metadata rule, E7 sets, rubric means for matches vs non-matches.
+
+## Wave 8 (H20): generation-stage replication on the UN General Assembly (E13)
+
+Motivation: design review item. Auxiliary to the Security Council study; generalization is limited to UN voting simulation.
+Fixed before any E13 code or output.
+
+Design:
+- Queries: General Assembly roll calls 2013-2019 with all five P5 votes recorded, a matching precedent (identical P5
+  configuration) among earlier roll calls after removing those with the same normalized title (E9 rule), and at least three
+  earlier precedents of other configurations among the stratified candidates. If more than 150 qualify, a uniform random
+  sample of 150 (seed 0). Rows: query x P5 member with a recorded vote.
+- Candidate set (E10 construction): the most similar matching precedent + the three best-ranked stratified precedents of
+  other configurations; text as in E9.
+- Conditions, all scored in one run per model: none; matching precedent alone ("one appropriate precedent"); four together
+  with the match at positions 1 to 4 (ordering sensitivity); each distractor alone (random-selection baseline = uniform pick
+  over the four singles); the model's own pick from the four texts (selector prompt adapted to the Assembly, four orderings),
+  shown alone via the single-precedent rows ("single model-selected precedent").
+- Prompt: the Security Council template adapted to the Assembly (no veto sentence); same option-likelihood scoring.
+- Models: Llama-3.3-70B-FP8, Mistral-Small-24B-2501-FP8, Qwen2.5-32B-GPTQ-Int8, Qwen2.5-7B.
+- Metrics: AUROC(N) primary; BC-F1, P(true); selection hit (pick = match, chance 0.25) and selection appropriateness (J1-P
+  judge of E12 applied to the Assembly pairs).
+- Statistics: query-cluster bootstrap, B = 2000, one-sided; Holm within model over H20a-d.
+
+Hypotheses:
+- H20a: AUROC(N), match alone > four together (mean over positions).
+- H20b: AUROC(N), match alone > the model's own pick shown alone (mean over orderings).
+- H20c: AUROC(N), four together (mean over positions) > none.
+- H20d: AUROC(N), four together with the match first > with the match last.
+Exploratory: own pick vs random and first-ranked; selection hit vs 0.25 and by position; selection appropriateness.
+
+## Correction note (8 Oct 2026) on the wave-3 amendment above
+The amendment heading "Follow-up analyses E7 and E8 (amendment; committed 2026-10-03 after their first outputs)" is superseded
+(decision D85): file creation times show that commit cf135a5 (wave 3, 2026-10-03 03:17 UTC) precedes every E7 and E8 output,
+and the executed code equals the committed code, so H13 to H15 count as pre-registered. Only E8b (whole-pool stratification
+under dilution) remains exploratory. The amendment text is kept unchanged for the record.
